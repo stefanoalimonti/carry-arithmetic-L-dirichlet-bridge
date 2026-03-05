@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite it as below."
+title: "The Carry–Dirichlet Bridge: Stopping-Time Series and L²(s,χ₄)"
+authors:
+  - family-names: Alimonti
+    given-names: Stefano
+    orcid: "https://orcid.org/0009-0009-1183-1698"
+    email: "stefalimonti@gmail.com"
+date-released: 2026-03-05
+repository-code: "https://github.com/stefanoalimonti/carry-arithmetic-L-dirichlet-bridge"
+keywords:
+  - carry arithmetic
+  - Dirichlet L-functions
+  - stopping time
+  - Witt vectors
+  - spectral gap
+  - Diaconis-Fulman
+license: CC-BY-4.0
