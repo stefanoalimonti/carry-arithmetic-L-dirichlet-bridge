@@ -380,10 +380,10 @@ All quantitative claims in this paper are supported by explicit pass/fail gates 
 
 ## References
 
-- [P1] S. Alimonti, *Pi from Pure Arithmetic: A Spectral Phase Transition in the Binary Carry Bridge*, 2026.
-- [E] S. Alimonti, *The Trace Anomaly of Binary Multiplication*, 2026.
-- [A] S. Alimonti, *Spectral Theory of Carries*, 2026.
-- [B] S. Alimonti, *Carry Polynomials and the Euler Product*, 2026.
-- [H] S. Alimonti, *Carry Polynomials and the Partial Euler Product (Control)*, 2026.
-- [Frobenius] S. Alimonti, *Frobenius Eigenvalues and Gauss Sums from Witt Carries*, 2026.
+- [P1] S. Alimonti, *Pi from Pure Arithmetic: A Spectral Phase Transition in the Binary Carry Bridge*, 2026. doi:10.5281/zenodo.18895611
+- [E] S. Alimonti, *The Trace Anomaly of Binary Multiplication*, 2026. doi:10.5281/zenodo.18895604
+- [A] S. Alimonti, *Spectral Theory of Carries*, 2026. doi:10.5281/zenodo.18895593
+- [B] S. Alimonti, *Carry Polynomials and the Euler Product*, 2026. doi:10.5281/zenodo.18895597
+- [H] S. Alimonti, *Carry Polynomials and the Partial Euler Product (Control)*, 2026. doi:10.5281/zenodo.18895603
+- [Frobenius] S. Alimonti, *Frobenius Eigenvalues and Gauss Sums from Witt Carries*, 2026. doi:10.5281/zenodo.18895613
 - P. Diaconis, J. Fulman, *Carries, shuffling, and symmetric functions*, Advances in Applied Mathematics 43 (2009), 176–196.
