@@ -23,12 +23,7 @@ on Re(s)>1 fit/holdout grids.
 import cmath
 import math
 from statistics import median
-from typing import Dict, List, Tuple
-
-try:
-    import mpmath as mp
-except Exception:
-    mp = None
+from typing import List, Tuple
 
 import _shared
 
@@ -37,64 +32,14 @@ def flush(*args, **kwargs):
     print(*args, **kwargs, flush=True)
 
 
-def chi4(n: int) -> int:
-    r = n % 4
-    if r % 2 == 0:
-        return 0
-    return 1 if r == 1 else -1
-
-
 primes_upto = _shared.primes_upto
 build_highk_bank = _shared.build_highk_bank
 u_mix_map = _shared.u_mix_map
-
-
-def n_of_tau(tau: int, tau0: int = 3) -> int:
-    return 2 * (tau - tau0) + 1
-
-
-def mu_chi4(u_mix: Dict[int, float], s: complex, tau0: int = 3) -> complex:
-    total = 0.0 + 0.0j
-    for tau in sorted(u_mix.keys()):
-        if tau < tau0:
-            continue
-        n = n_of_tau(tau, tau0=tau0)
-        c = chi4(n)
-        if c == 0:
-            continue
-        total += (u_mix[tau] * c) * cmath.exp(-s * math.log(n))
-    return total
-
-
-def L_chi4(s: complex) -> complex:
-    if mp is None:
-        raise RuntimeError("mpmath unavailable.")
-    mp.mp.dps = 70
-    q = 4
-    ss = mp.mpc(s.real, s.imag)
-    total = mp.mpc(0)
-    qpow = mp.power(q, ss)
-    for a in range(1, q + 1):
-        c = chi4(a)
-        if c == 0:
-            continue
-        total += c * mp.hurwitz(ss, mp.mpf(a) / q)
-    return complex(total / qpow)
-
-
-def fit_c(mu_vals: List[complex], l_vals: List[complex]) -> complex:
-    num = 0.0 + 0.0j
-    den = 0.0
-    for m, l in zip(mu_vals, l_vals):
-        num += m * l.conjugate()
-        den += (l.real * l.real + l.imag * l.imag)
-    if den <= 1e-30:
-        return complex(float("nan"), float("nan"))
-    return num / den
-
-
-def rel(a: complex, b: complex) -> float:
-    return abs(a - b) / max(abs(a), 1e-15)
+chi4 = _shared.primitive_characters()[1]["fn"]
+mu_chi4 = lambda u_mix, s, tau0=3: _shared.mu_chi(u_mix, chi4, s, tau0=tau0)
+L_chi4 = lambda s: _shared.L_hurwitz(s, 4, chi4)
+fit_c = _shared.fit_c
+rel = _shared.rel
 
 
 def euler_full_norm(s: complex, s0: complex, P: int, plist: List[int]) -> complex:
@@ -133,7 +78,7 @@ def main():
     flush("=" * 78)
     flush("P1-SPRINT-L5: F(s) Euler-tail identity test")
     flush("=" * 78)
-    if mp is None:
+    if _shared.mp is None:
         flush("ERROR: mpmath required.")
         return
 

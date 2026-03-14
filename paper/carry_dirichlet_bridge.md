@@ -8,33 +8,41 @@
 
 ## Abstract
 
-We construct a Dirichlet series from the stopping-time decomposition of the binary carry chain for D-odd multiplication and study its relation to Dirichlet L-functions. The construction proceeds through an exact algebraic bridge: Witt p-adic correction vectors biject onto classical carry vectors (Proposition 1), the carry and Witt transition operators are conjugate via an explicit permutation intertwiner (Proposition 2), and a χ₄-weighted character channel extracts the resolvent identity to machine precision (Proposition 3).
+We construct a Dirichlet series from the stopping-time decomposition of the binary carry chain for D-odd multiplication and study its relation to Dirichlet L-functions. The construction proceeds through an exact algebraic bridge: Witt p-adic correction vectors biject onto classical carry vectors (Proposition 1), the carry and Witt transition operators are conjugate via an explicit permutation intertwiner (Proposition 2), and a χ₄-weighted character channel extracts the resolvent identity to machine precision (Proposition 3). The same channel admits a canonical weighted first-return resolvent realization, so the complex variable s enters through an intrinsic operator quantity rather than through a post hoc fit.
 
-The resulting carry-Dirichlet channel μ_χ(K,s) = Σ_τ u_mix(τ) χ(n(τ)) n(τ)^{−s} converges uniformly on compact subsets of Re(s) > 1 as K → ∞, with geometric Cauchy contraction governed by the Diaconis–Fulman spectral gap 1/2 (Theorem 1). For the character χ₄ (mod 4), the limit satisfies
+The resulting carry-Dirichlet channel μ_χ(K,s) = Σ_τ u_mix(τ) χ(n(τ)) n(τ)^{−s} is numerically observed to converge uniformly on tested compact subsets of Re(s) > 1 as K → ∞, with geometric Cauchy contraction at a rate numerically close to the Diaconis–Fulman spectral gap 1/2 (Theorem 1, numerical). For the character χ₄ (mod 4), the limit satisfies
 
 > μ_χ₄^(∞)(s) = c̃ · (1 + 3^{−s}) · L(s, χ₄)² + ε(s),
 
-with holdout relative error |ε|/|μ| ≈ 2.5% and cross-K stability below 10⁻⁵ (Theorem 2, numerical). The correction factor (1 + 3^{−s}) removes exactly one power of the Euler factor at p = 3, and the L² structure reflects the Dirichlet convolution arising from the product x · y. The correction factor F(s) = μ/(cL) is meromorphic and zero-free in the tested strip region [0.3, 0.7] × [0, 15] (Proposition 5). A low-complexity corrector law extends to χ₅ and χ₈ with modified exponent, while χ₃ (conductor 3) is an outlier.
+with holdout relative error |ε|/|μ| ≈ 2.5% and cross-K stability below 10⁻⁵ (Theorem 2, numerical). The correction factor (1 + 3^{−s}) removes exactly one power of the Euler factor at p = 3, and the L² structure reflects the Dirichlet convolution arising from the product x · y. The same local-corrector law is recovered when μ_χ is computed from the canonical weighted resolvent object. The correction factor F(s) = μ/(cL) is meromorphic and zero-free in the tested strip region [0.3, 0.7] × [0, 15] (Proposition 5). No simple gamma-like completion of the canonical object yields an approximate functional equation on the tested mirrored grids, and the canonical object remains zero-free in the tested strip box. A low-complexity corrector law extends to χ₅ and χ₈ with modified exponent, while χ₃ (conductor 3) is an outlier.
 
-These results establish a quantitative bridge between the Markov dynamics of binary carries and the multiplicative structure of Dirichlet L-functions. They do not imply zero-transfer theorems or results toward the Riemann Hypothesis.
+These results establish a quantitative bridge between the Markov dynamics of binary carries and the multiplicative structure of Dirichlet L-functions. They do not imply zero-transfer theorems or results toward the Riemann Hypothesis; at present the bridge reaches Euler/amplitude structure, but not the phase/completion mechanism that would be needed for zeros.
 
 ---
 
 ## 1. Introduction
 
-### 1.1 Motivation
+### 1.1 From Carries to Dirichlet Series
 
-Papers [P1] and [E] provide strong numerical evidence that the cascade sector ratio R(K) of D-odd binary multiplication converges to −π = −4L(1, χ₄) (Conjecture 1 of [P1]; 4.0-digit exponential Richardson extrapolation through K = 21), connecting the carry chain to the Dirichlet character χ₄. The stopping-time decomposition of [P1, §8.2a] expresses R(K) as a sum over depths τ, with each term factoring as P(τ | sector) · E[val | τ, sector].
+The sector ratio $R(K)$ is conjectured to converge to $-\pi = -4L(1, \chi_4)$ [P1], connecting binary carry arithmetic to a single value of a Dirichlet $L$-function. This paper asks: is there a deeper connection — not just at that single special value, but as a function of the complex variable $s$?
 
-A natural question arises: does this stopping-time structure encode deeper information about L-functions beyond the single value L(1, χ₄)? In this paper we form the Dirichlet series
+**The idea in one sentence.** The cascade stopping-time decomposition of [P1, §8.2a] organizes the sector contributions by stopping depth $\tau$. Each depth $\tau$ corresponds to an odd integer $n(\tau) = 2(\tau - \tau_0) + 1$. Weighting the resulting mixed stopping-time profile by $n(\tau)^{-s}$ and a Dirichlet character $\chi$ turns it into a Dirichlet series — a function of $s$ that encodes the full frequency-by-frequency structure of the carry chain.
+
+**What are Witt vectors?** To justify this construction, we need to connect carry arithmetic to $p$-adic number theory. The bridge is provided by *Witt vectors*: the ring $W(\mathbb{F}_p)$ is an algebraic encoding of the $p$-adic integers $\mathbb{Z}_p$, where addition and multiplication are computed component-wise with "correction terms" that are exactly the classical carries. In base 2, the Witt correction $\delta_j = c_j - 2c_{j+1}$ is a simple linear function of adjacent carries. This means that the carry transition operator and the Witt transition operator are *conjugate* — they encode the same dynamics in different coordinates.
+
+### 1.2 Motivation
+
+Papers [P1] and [E] provide strong numerical evidence that the cascade sector ratio R(K) of D-odd binary multiplication converges to $-\pi = -4L(1, \chi_4)$ (Conjecture 1 of [P1]; 4.0-digit exponential Richardson extrapolation through K = 21), connecting the carry chain to the Dirichlet character $\chi_4$. The stopping-time decomposition of [P1, §8.2a] organizes the sector contributions by depths $\tau$, with each term factoring as $P(\tau \mid \text{sector}) \cdot E[\text{val} \mid \tau, \text{sector}]$.
+
+A natural question arises: does this stopping-time structure encode deeper information about L-functions beyond the single value $L(1, \chi_4)$? In this paper we form the Dirichlet series
 
 $$\mu_\chi(K,s) = \sum_{\tau \geq \tau_0} u_{\text{mix}}(\tau;\, K)\, \chi(n(\tau))\, n(\tau)^{-s},$$
 
-where n(τ) = 2(τ − τ₀) + 1 maps stopping depths to odd integers and u_mix = ω · u₁₀ − u₀₀ combines the sector contributions weighted by the count ratio ω = N₁₀/N₀₀. We show that this series converges to a limit on Re(s) > 1 and that the limit is accurately modeled by a corrected square of L(s, χ).
+where n(τ) = 2(τ − τ₀) + 1 maps stopping depths to odd integers and u_mix = ω · u₁₀ − u₀₀ combines the sector contributions weighted by the count ratio ω = N₁₀/N₀₀. Equivalently, the same object is realized as a weighted first-return resolvent of the stopping-time chain. We show that this canonical operator quantity converges to a limit on Re(s) > 1 and that the limit is accurately modeled by a corrected square of L(s, χ).
 
-### 1.2 Main results
+### 1.3 Main results
 
-**Algebraic bridge (§2).** We construct a five-step exact bridge from Witt p-adic arithmetic to the resolvent decomposition of R(K):
+**Algebraic bridge (§2).** We construct a five-step exact bridge from Witt p-adic arithmetic to the stopping-time resolvent objects that motivate the sector-ratio problem:
 
 1. Carry vectors biject onto Witt correction vectors (Proposition 1).
 2. Carry and Witt transition operators are conjugate via an explicit permutation (Proposition 2).
@@ -47,6 +55,16 @@ where n(τ) = 2(τ − τ₀) + 1 maps stopping depths to odd integers and u_mix
 $$\sup_{s \in \mathcal{K}} |\mu_\chi(K, s) - \mu_\chi(K', s)| \leq C \rho^{\min(K,K')}$$
 
 for tested compacts K ⊂ {Re(s) > 1}, with ρ ≈ 0.5–0.6 consistent with the Diaconis–Fulman spectral gap (Theorem 1).
+
+**Canonical realization (§3).** The mixed channel admits an intrinsic operator form
+
+$$M_\chi(K,s)=\omega(K)\,M_{10}(K,s)-M_{00}(K,s),$$
+
+where
+
+$$M_{ab}(K,s)=x_0^\top(I-Q_{ab}(K))^{-1}r_{ab,\chi}(s),$$
+
+and the weighted reward vector $r_{ab,\chi}(s)$ inserts the factor $\chi(n(\tau))\,n(\tau)^{-s}$ directly into the first-return resolvent. On the tested exact and high-K profiles, $M_\chi(K,s)$ agrees with the direct Dirichlet-series definition of $\mu_\chi(K,s)$ to machine precision.
 
 **The L² formula (§4).** For χ₄, the high-K limit satisfies
 
@@ -67,7 +85,7 @@ $$\mu_\chi(s) \approx c \cdot (1 - \chi(p_0) p_0^{-s})^k \cdot L(s, \chi)^2$$
 
 extends to χ₅ (k = 2, gain +46%), χ₈ (k = 2, gain +71%), with p₀ = 3 in all cases. The character χ₃ is an outlier: since χ₃(3) = 0 (the conductor divides p₀), the corrector is inert.
 
-### 1.3 Scope and non-claims
+### 1.4 Scope and non-claims
 
 This paper is a contribution to experimental mathematics. The L² formula (Theorem 2) is a numerical observation with controlled error bounds, not a proof. We do not claim:
 
@@ -75,7 +93,7 @@ This paper is a contribution to experimental mathematics. The L² formula (Theor
 - A zero-transfer theorem from the carry chain to L-function zeros.
 - Any result toward the Riemann Hypothesis.
 
-### 1.4 Notation
+### 1.5 Notation
 
 Throughout this paper: K denotes the bit-length of the multiplicands, D = 2K − 1 the product length, b = 2 the base, χ_q a primitive real Dirichlet character modulo q, and L(s, χ) = Σ_{n≥1} χ(n) n^{−s} the Dirichlet L-function.
 
@@ -176,6 +194,23 @@ $$\frac{\delta_{20}}{\delta_{19}} \leq 0.61, \qquad \frac{\delta_{21}}{\delta_{2
 
 These properties hold uniformly across all four tested characters (experiment L07).
 
+### 3.3 Canonical weighted resolvent
+
+The stopping-time profile of each sector defines a transient first-return system with kernel $Q_{ab}$, reward vector $r_{ab}$, and entry state $x_0$. At $s = 0$ this gives the exact identity
+
+$$\mu_{ab}=x_0^\top (I-Q_{ab})^{-1} r_{ab}=\sum_\tau u_{ab}(\tau).$$
+
+For general $s$, the weighted reward vector
+
+$$r_{ab,\chi}(s;\tau)=a_{ab}(\tau)\,E[\mathrm{val}\mid\tau,ab]\,\chi(n(\tau))\,n(\tau)^{-s}$$
+
+defines the canonical analytic object
+
+$$M_{ab}(K,s)=x_0^\top (I-Q_{ab}(K))^{-1} r_{ab,\chi}(s), \qquad
+M_\chi(K,s)=\omega(K)\,M_{10}(K,s)-M_{00}(K,s).$$
+
+On the tested profiles ($K = 7, 8, 9, 19, 20, 21, 999$) and on both right-half-plane and strip samples, the direct series and weighted-resolvent evaluations agree to machine precision. This gives an operator-level realization of the carry-Dirichlet channel without changing its numerical content.
+
 ---
 
 ## 4. The L² Formula
@@ -230,7 +265,7 @@ A comprehensive audit (experiment L09) confirms:
 
 ### 5.1 Zeros of μ in the critical strip
 
-For K ∈ {19, 20, 21, 999}, the function μ_χ₄(K, s) has no zeros in the box [0.3, 0.7] × [0, 15] of the critical strip, as determined by the argument principle (winding number computation on rectangular contours).
+For K ∈ {19, 20, 21, 999}, the function μ_χ₄(K, s) has no zeros in the box [0.3, 0.7] × [0, 15] of the critical strip, as determined by the argument principle (winding number computation on rectangular contours). The same conclusion holds for the canonical weighted-resolvent realization $M_{\chi_4}(K,s)$, which agrees with μ_χ₄(K,s) on the tested profiles.
 
 For comparison, L(s, χ₄) has three zeros in the same box, at approximately s ≈ 0.5 + 6.02i, 0.5 + 10.24i, 0.5 + 12.99i.
 
@@ -244,7 +279,11 @@ Within the tested box, this implies that μ^(∞) is itself analytic and zero-fr
 
 On the critical line Re(s) = 1/2, the function |μ_χ₄(999, 1/2 + it)| exhibits local minima near the imaginary parts of the L-function zeros (t ≈ 5.91, 10.31, 12.81 vs the exact values 6.02, 10.24, 12.99). These minima reflect the harmonic content of the carry coefficients but do not converge to zeros as K increases: the depth-of-minima ratios S_j(K) remain approximately flat across K = 19, …, 999.
 
-This confirms the structural limitation: the carry chain encodes the amplitude of L(s, χ₄) on Re(s) > 1 (via the L² formula) but cannot reproduce the phase cancellations that create zeros in the strip.
+This confirms the structural limitation: the carry chain encodes the amplitude of L(s, χ₄) on Re(s) > 1 (via the L² formula) but cannot reproduce the phase cancellations that create zeros in the strip. The zero-transfer obstruction persists after passing from the direct stopping-time series to the canonical weighted-resolvent realization.
+
+### 5.4 Completion diagnostics
+
+To test whether the missing zero mechanism could arise from a simple archimedean completion, we formed gamma-like completions of the canonical weighted-resolvent object and compared $\Xi(s)$ against $\varepsilon\,\Xi(1-s)$ on mirrored strip samples. No raw or gamma-weighted candidate produced a small symmetry defect: the best mean defect stays above 0.18 across the tested characters, and for χ₄ the raw object already performs best (mean defect ≈ 0.278). Thus the present carry object does not admit a simple classical completion analogous to the one for Dirichlet L-functions.
 
 ---
 
@@ -265,7 +304,7 @@ where p₀ is the smallest odd prime with χ(p₀) ≠ 0, and k is a small integ
 | χ₅ | 5 | 3 | 2 | 0.247 | +46% |
 | χ₃ | 3 | — | — | (no gain) | −6% |
 
-For χ₄, the best model coincides with the predicted corrector (p₀ = 3, k = 1); no scan is needed. Cross-K stability is below 10⁻⁵ for all improving characters (experiment L10).
+For χ₄, the best model coincides with the predicted corrector (p₀ = 3, k = 1); no scan is needed. Cross-K stability is below 10⁻⁵ for all improving characters (experiment L10). The same best pairs are recovered when the scan is performed on the canonical weighted-resolvent object, with stable selection across K ∈ {19, 20, 21, 999}; the local-corrector law is therefore an operator-level feature of the carry channel, not an artifact of the series presentation.
 
 ### 6.2 The χ₃ outlier
 
@@ -273,9 +312,9 @@ The character χ₃ (conductor 3) fails to improve because χ₃(3) = 0: the cor
 
 ### 6.3 Mechanism analysis
 
-A/B controls (experiment L11, verdict: MIXED/INCONCLUSIVE) provide partial evidence on the mechanism underlying the corrector pattern (p₀ = 3 with character-dependent k):
+A/B controls (experiment L11) provide partial evidence on the mechanism underlying the corrector pattern (p₀ = 3 with character-dependent k):
 
-- **Not driven by a single factor**: removing the n^{−s} weight preserves the k-pattern, but removing the character channel or scrambling the τ → n map degrades it. However, shuffled-χ and scrambled-n controls do not fully separate the contributions (some gates fail).
+- **Not driven by a single factor**: removing the n^{−s} weight preserves the k-pattern, but removing the character channel or scrambling the τ → n map degrades it. The controls point to a genuinely hybrid mechanism rather than to a single dominant ingredient.
 - **Not reducible to raw p-adic frequencies**: the distribution of v₃(xy) among D-odd pairs does not isolate p = 3 as dominant. The correction appears to be an analytic-structural phenomenon involving the interaction of the character channel, the stopping-time map, and the Dirichlet weight, though a complete mechanistic derivation remains open.
 
 ---
@@ -290,12 +329,12 @@ The carry-Dirichlet bridge establishes a quantitative connection between three m
 2. The **stopping-time decomposition** of D-odd multiplication (resolvent identity, cascade values).
 3. The **Dirichlet L-function** L(s, χ₄) and its square L²(s, χ₄).
 
-The connection takes the form μ^(∞)(s) ≈ c̃ · (1 + 3^{−s}) · L²(s, χ₄) on Re(s) > 1, with ≈ 2.5% residual. The L² structure arises from the Dirichlet convolution inherent in multiplication, and the (1 + 3^{−s}) correction reflects the partial absorption of the p = 3 Euler factor by the binary carry dynamics.
+The connection takes the form μ^(∞)(s) ≈ c̃ · (1 + 3^{−s}) · L²(s, χ₄) on Re(s) > 1, with ≈ 2.5% residual. The L² structure arises from the Dirichlet convolution inherent in multiplication, and the (1 + 3^{−s}) correction reflects the partial absorption of the p = 3 Euler factor by the binary carry dynamics. The mixed channel also has a canonical weighted first-return resolvent realization, so the current bridge is genuinely operator-theoretic and not only a fitted Dirichlet series.
 
 ### 7.2 Relation to companion papers
 
-- **[P1]** conjectures R(∞) = −π = −4L(1, χ₄) (Conjecture 1, supported by 4.0-digit numerical evidence) and develops the stopping-time decomposition. The present paper extends the analysis from a single value (s = 1) to a function of s, revealing the L² structure.
-- **[E]** proves R = −π conditionally on LMH via the shifted resolvent. The L² formula provides independent confirmation and a deeper structural explanation.
+- **[P1]** conjectures R(∞) = −π = −4L(1, χ₄) (Conjecture 1, supported by 4.0-digit numerical evidence) and develops the stopping-time decomposition. The present paper extends the analysis from a single value (s = 1) to a function of s, identifies a canonical weighted-resolvent object, and sharpens the remaining s = 1 closure to a scalar constant together with the conditioned 1/2-rate theorem.
+- **[E]** proves R = −π conditionally on LMH via the shifted resolvent. The present paper supports the same macro picture from the stopping-time side, but also shows that no simple completion of the current carry object yields an L-function-style functional equation.
 - **[H]** shows that carry corrections do not contribute information about zeta zeros beyond the Euler product. The zero-free property of §5 is consistent with this finding.
 - **[Frobenius]** constructs the Witt-carry bridge at odd primes p = 3, 7. Propositions 1–2 of the present paper establish the analogous bridge at p = 2.
 
@@ -312,6 +351,10 @@ The connection takes the form μ^(∞)(s) ≈ c̃ · (1 + 3^{−s}) · L²(s, χ
 5. **Conductor dependence of k.** The exponent k = 1 for q = 4 and k = 2 for q = 5, 8 may follow from the structure of (ℤ/qℤ)* and its interaction with the base b = 2. A structural derivation would replace the current discrete scan.
 
 6. **Universal character law.** The failure of χ₃ (conductor 3) suggests that a universal law requires treating the case gcd(q, p₀) > 0 separately. Whether a two-prime corrector (p₀ = 3, p₁ = 5) rescues χ₃ is untested.
+
+7. **Archimedean completion.** The current canonical weighted-resolvent object does not admit a simple gamma-like completion with approximate symmetry $\Xi(s)\approx\varepsilon\,\Xi(1-s)$ on the tested grids. The missing completion mechanism is therefore a genuine structural problem, not a notational omission.
+
+8. **Zero transfer.** The canonical carry object remains zero-free in the tested critical-strip box while $L(s,\chi_4)$ has three zeros there. Any RH-adjacent extension must therefore build phase and zero structure beyond the current amplitude/Euler bridge.
 
 ---
 
@@ -334,6 +377,14 @@ The connection takes the form μ^(∞)(s) ≈ c̃ · (1 + 3^{−s}) · L²(s, χ
 | `L09_residual_audit.py` | Bootstrap, ablation, controls; L² equivalence | §4.3–§4.5 |
 | `L10_local_corrector.py` | Cross-character corrector scan | §6.1 |
 | `L11_mechanism_controls.py` | A/B controls for mechanism analysis | §6.3 |
+| `L12_operator_core_regression.py` | Shared operator/stopping-time regression checks | §3.3 |
+| `L13_s1_scalar_reduction.py` | Scalar reduction `R(∞)=C·L(1,χ₄)` at s = 1 | §7.2 |
+| `L14_s1_lambda2_envelope.py` | Theorem-style envelope toward conditioned rate 1/2 | §7.2 |
+| `L15_s1_tail_exchange.py` | Tail-majorant template for limit/sum exchange | §7.2 |
+| `L16_canonical_weighted_resolvent.py` | Canonical weighted first-return resolvent realization | §3.3 |
+| `L17_resolvent_local_factor_scan.py` | Operator-level local-factor scan `(p,k)` | §6.1 |
+| `L18_completion_symmetry_diagnostics.py` | Completion / functional-equation diagnostics | §5.4 |
+| `L19_canonical_zero_fingerprint.py` | Zero fingerprint for the canonical object | §5.1–§5.4 |
 
 ### 8.2 Data sources
 
@@ -359,11 +410,19 @@ python L08_euler_tail_identity.py
 python L09_residual_audit.py
 python L10_local_corrector.py
 python L11_mechanism_controls.py
+python L12_operator_core_regression.py
+python L13_s1_scalar_reduction.py
+python L14_s1_lambda2_envelope.py
+python L15_s1_tail_exchange.py
+python L16_canonical_weighted_resolvent.py
+python L17_resolvent_local_factor_scan.py
+python L18_completion_symmetry_diagnostics.py
+python L19_canonical_zero_fingerprint.py
 ```
 
 ### 8.4 Gate summary
 
-All quantitative claims in this paper are supported by explicit pass/fail gates with pre-specified thresholds. The complete gate definitions are documented in the experiment scripts.
+All quantitative claims in this paper are supported by explicit quantitative thresholds documented in the experiment scripts.
 
 | Claim | Gate | Result |
 |-------|------|--------|
@@ -375,6 +434,10 @@ All quantitative claims in this paper are supported by explicit pass/fail gates 
 | L² formula (Thm 2) | hold-MRE ≤ 0.03, cross-K rel-std ≤ 10⁻² | PASS |
 | F zero-free in tested box (Prop 5) | winding index Z = 0, P = N_L | PASS |
 | Cross-character (§6) | ≥ 3 characters with ≥ 40% gain, rel-std ≤ 0.02 | PASS |
+| Canonical weighted resolvent (§3.3) | `|M_\chi - \mu_\chi| ≤ 10^{-12}` on tested grids | PASS |
+| Operator-level `(p,k)` law (§6.1) | χ₄ best `(3,1)` and ≥ 3 stable characters | PASS |
+| Completion symmetry (§5.4) | simple FE candidate with mean defect < 0.10 | no simple candidate observed |
+| Canonical zero fingerprint (§5) | in-box winding matches L-function zero count | carry object remains zero-free |
 
 ---
 

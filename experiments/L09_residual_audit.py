@@ -25,49 +25,11 @@ import math
 import random
 from typing import Callable, Dict, List, Tuple
 
-try:
-    import mpmath as mp
-except Exception:
-    mp = None
-
 import _shared
 
 
 def flush(*args, **kwargs):
     print(*args, **kwargs, flush=True)
-
-
-def primitive_characters():
-    def chi3(n: int) -> int:
-        r = n % 3
-        if r == 0:
-            return 0
-        return 1 if r == 1 else -1
-
-    def chi4(n: int) -> int:
-        r = n % 4
-        if r % 2 == 0:
-            return 0
-        return 1 if r == 1 else -1
-
-    def chi5(n: int) -> int:
-        r = n % 5
-        if r == 0:
-            return 0
-        return 1 if r in (1, 4) else -1
-
-    def chi8(n: int) -> int:
-        r = n % 8
-        if r % 2 == 0:
-            return 0
-        return 1 if r in (1, 7) else -1
-
-    return [
-        {"name": "chi3", "q": 3, "fn": chi3},
-        {"name": "chi4", "q": 4, "fn": chi4},
-        {"name": "chi5", "q": 5, "fn": chi5},
-        {"name": "chi8", "q": 8, "fn": chi8},
-    ]
 
 
 def chi4(n: int) -> int:
@@ -81,53 +43,12 @@ primes_upto = _shared.primes_upto
 build_highk_bank = _shared.build_highk_bank
 u_mix_map = _shared.u_mix_map
 n_of_tau = _shared.n_of_tau
-
-
-def mu_chi(u_mix: Dict[int, float], chi_fn: Callable[[int], int], s: complex, tau0: int = 3) -> complex:
-    total = 0.0 + 0.0j
-    for tau in sorted(u_mix.keys()):
-        if tau < tau0:
-            continue
-        n = n_of_tau(tau, tau0=tau0)
-        c = chi_fn(n)
-        if c == 0:
-            continue
-        total += (u_mix[tau] * c) * cmath.exp(-s * math.log(n))
-    return total
-
-
-def L_hurwitz(s: complex, q: int, chi_fn: Callable[[int], int]) -> complex:
-    if mp is None:
-        raise RuntimeError("mpmath unavailable.")
-    mp.mp.dps = 70
-    ss = mp.mpc(s.real, s.imag)
-    total = mp.mpc(0)
-    qpow = mp.power(q, ss)
-    for a in range(1, q + 1):
-        ca = chi_fn(a)
-        if ca == 0:
-            continue
-        total += ca * mp.hurwitz(ss, mp.mpf(a) / q)
-    return complex(total / qpow)
-
-
-def fit_c(mu_vals: List[complex], l_vals: List[complex]) -> complex:
-    num = 0.0 + 0.0j
-    den = 0.0
-    for m, l in zip(mu_vals, l_vals):
-        num += m * l.conjugate()
-        den += (l.real * l.real + l.imag * l.imag)
-    if den <= 1e-30:
-        return complex(float("nan"), float("nan"))
-    return num / den
-
-
-def rel(a: complex, b: complex) -> float:
-    return abs(a - b) / max(abs(a), 1e-15)
-
-
-def mean(vals: List[float]) -> float:
-    return sum(vals) / max(len(vals), 1)
+primitive_characters = _shared.primitive_characters
+mu_chi = _shared.mu_chi
+L_hurwitz = _shared.L_hurwitz
+fit_c = _shared.fit_c
+rel = _shared.rel
+mean = _shared.mean
 
 
 def euler_tail_norm_generic(
@@ -412,7 +333,7 @@ def main():
     flush("=" * 78)
     flush("P1-SPRINT-L5bis: full audit")
     flush("=" * 78)
-    if mp is None:
+    if _shared.mp is None:
         flush("ERROR: mpmath required.")
         return
 

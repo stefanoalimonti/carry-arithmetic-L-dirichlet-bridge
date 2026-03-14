@@ -23,10 +23,7 @@ Diagnostics:
 """
 
 import argparse
-import cmath
-import math
-from collections import defaultdict
-from typing import Callable, Dict, List, Tuple
+from typing import Callable, List
 
 import _shared
 
@@ -35,116 +32,10 @@ def flush(*args, **kwargs):
     print(*args, **kwargs, flush=True)
 
 
-def primitive_characters():
-    def chi3(n: int) -> int:
-        r = n % 3
-        if r == 0:
-            return 0
-        return 1 if r == 1 else -1
-
-    def chi4(n: int) -> int:
-        r = n % 4
-        if r % 2 == 0:
-            return 0
-        return 1 if r == 1 else -1
-
-    def chi5(n: int) -> int:
-        r = n % 5
-        if r == 0:
-            return 0
-        return 1 if r in (1, 4) else -1
-
-    def chi8(n: int) -> int:
-        r = n % 8
-        if r % 2 == 0:
-            return 0
-        return 1 if r in (1, 7) else -1
-
-    return [
-        {"name": "chi3", "fn": chi3},
-        {"name": "chi4", "fn": chi4},
-        {"name": "chi5", "fn": chi5},
-        {"name": "chi8", "fn": chi8},
-    ]
-
-
-def sector_profile_exact(K: int, sector: str):
-    """
-    Exact per-tau profile for one sector:
-      u_tau = P(tau)*E[val|tau] = val_sum_tau / n_pairs
-    """
-    D = 2 * K - 1
-    count_tau = defaultdict(int)
-    val_sum_tau = defaultdict(float)
-    n_pairs = 0
-    cas_sum = 0.0
-
-    for _, _, carries in _shared.enumerate_dodd_sector(K, sector):
-        n_pairs += 1
-        tau_val = None
-        for j in range(D, 0, -1):
-            if carries[j] > 0:
-                tau_val = D - j
-                break
-
-        cas_val = 0.0
-        if tau_val is not None:
-            j_stop = D - tau_val
-            if j_stop >= 1:
-                cas_val = float(carries[j_stop - 1] - 1)
-        cas_sum += cas_val
-
-        if tau_val is not None:
-            count_tau[tau_val] += 1
-            val_sum_tau[tau_val] += cas_val
-
-    if n_pairs <= 0:
-        return {"n_pairs": 0, "u": {}, "mu": 0.0}
-
-    u = {t: (val_sum_tau[t] / n_pairs) for t in sorted(val_sum_tau.keys())}
-    return {"n_pairs": n_pairs, "u": u, "mu": cas_sum / n_pairs}
-
-
-def build_exact_bank(k_min: int, k_max: int):
-    bank = {}
-    for K in range(k_min, k_max + 1):
-        rec00 = sector_profile_exact(K, "00")
-        rec10 = sector_profile_exact(K, "10")
-        if rec00["n_pairs"] <= 0 or rec10["n_pairs"] <= 0:
-            continue
-        omega = rec10["n_pairs"] / rec00["n_pairs"]
-        bank[K] = {
-            "omega": omega,
-            "u00": rec00["u"],
-            "u10": rec10["u"],
-            "n00": rec00["n_pairs"],
-            "n10": rec10["n_pairs"],
-        }
-    return bank
-
-
-def build_highk_bank():
-    return _shared.build_highk_bank()
-
-
-def mu_chi_of_s(rec: dict, chi_fn: Callable[[int], int], s: complex, tau0: int = 3) -> complex:
-    u00 = rec["u00"]
-    u10 = rec["u10"]
-    omega = rec["omega"]
-    taus = sorted(set(u00.keys()) | set(u10.keys()))
-    total = 0.0 + 0.0j
-    for tau in taus:
-        if tau < tau0:
-            continue
-        n = 2 * (tau - tau0) + 1
-        if n <= 0:
-            continue
-        c = chi_fn(n)
-        if c == 0:
-            continue
-        u_mix = omega * u10.get(tau, 0.0) - u00.get(tau, 0.0)
-        total += (u_mix * c) * cmath.exp(-s * math.log(n))
-    return total
+primitive_characters = _shared.primitive_characters
+build_exact_bank = _shared.build_exact_bank
+build_highk_bank = _shared.build_highk_bank
+mu_chi_of_s = _shared.mu_chi_from_record
 
 
 def sup_diff(rec_a: dict, rec_b: dict, chi_fn: Callable[[int], int], s_grid: List[complex]) -> float:

@@ -1,8 +1,14 @@
 """
 Shared utilities for Paper L experiments.
 
-Contains data-loading, profile-building, character definitions,
-Dirichlet L-function evaluation, and D-odd enumeration routines.
+This module is the reusable operator/stopping-time core for the
+carry-to-Dirichlet bridge:
+  - E45 high-K profile parsing
+  - exact/sampled stopping-time profiles
+  - first-return resolvent construction
+  - mixed character channels mu_chi(K, s)
+  - Dirichlet L-function evaluation and fit helpers
+
 All data files are loaded from the local data/ directory.
 """
 
@@ -18,6 +24,11 @@ try:
     import mpmath as mp
 except ImportError:
     mp = None
+
+try:
+    import numpy as np
+except ImportError:
+    np = None
 
 _DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
 
@@ -101,6 +112,7 @@ def load_e162_R_history() -> Dict[int, float]:
 class TauProfile:
     K: int
     sec: str
+    n_pairs: int
     taus: List[int]
     p: Dict[int, float]
     e: Dict[int, float]
@@ -109,6 +121,14 @@ class TauProfile:
     a: Dict[int, float]
     ccdf: Dict[int, float]
     mu_direct: float
+
+
+@dataclass
+class FirstReturnSystem:
+    taus: List[int]
+    Q: "np.ndarray"
+    r: "np.ndarray"
+    x0: "np.ndarray"
 
 
 def build_profile(res: dict, sec: str) -> TauProfile:
@@ -159,10 +179,116 @@ def build_profile(res: dict, sec: str) -> TauProfile:
 
     mu_direct = sum(u.values())
     return TauProfile(
-        K=res["K"], sec=sec, taus=taus,
+        K=res["K"], sec=sec, n_pairs=n, taus=taus,
         p=p, e=e, u=u, q=q, a=a, ccdf=ccdf,
         mu_direct=mu_direct,
     )
+
+
+def build_first_return_system(profile: TauProfile) -> FirstReturnSystem:
+    """
+    Build the transient first-return linear system
+        mu = x0^T (I - Q)^(-1) r
+    from a stopping-time profile.
+    """
+    if np is None:
+        raise RuntimeError("numpy is required for build_first_return_system.")
+
+    taus = profile.taus
+    n = len(taus)
+    Q = np.zeros((n, n), dtype=float)
+    r = np.zeros((n,), dtype=float)
+    x0 = np.zeros((n,), dtype=float)
+
+    if n == 0:
+        return FirstReturnSystem(taus=taus, Q=Q, r=r, x0=x0)
+
+    x0[0] = 1.0
+    for i, tau in enumerate(taus):
+        r[i] = profile.a[tau] * profile.e[tau]
+        if i + 1 < n:
+            Q[i, i + 1] = profile.q[tau]
+    return FirstReturnSystem(taus=taus, Q=Q, r=r, x0=x0)
+
+
+def mu_from_resolvent(profile: TauProfile) -> float:
+    """
+    Evaluate the first-return resolvent identity
+        mu = x0^T (I - Q)^(-1) r
+    for a TauProfile.
+    """
+    if np is None:
+        raise RuntimeError("numpy is required for mu_from_resolvent.")
+    system = build_first_return_system(profile)
+    if len(system.taus) == 0:
+        return 0.0
+    g = np.linalg.solve(np.eye(len(system.taus)) - system.Q, system.r)
+    return float(system.x0 @ g)
+
+
+def tau_weight_map(
+    profile: TauProfile,
+    chi_fn: Callable[[int], int],
+    s: complex,
+    tau0: int = 3,
+) -> Dict[int, complex]:
+    """
+    Canonical analytic weight attached to each stopping time tau:
+        w_chi,s(tau) = chi(n(tau)) * n(tau)^(-s)
+    """
+    weights: Dict[int, complex] = {}
+    for tau in profile.taus:
+        if tau < tau0:
+            weights[tau] = 0.0 + 0.0j
+            continue
+        n = n_of_tau(tau, tau0=tau0)
+        c = chi_fn(n)
+        if c == 0:
+            weights[tau] = 0.0 + 0.0j
+        else:
+            weights[tau] = c * cmath.exp(-s * math.log(n))
+    return weights
+
+
+def mu_chi_from_profile_resolvent(
+    profile: TauProfile,
+    chi_fn: Callable[[int], int],
+    s: complex,
+    tau0: int = 3,
+) -> complex:
+    """
+    Canonical weighted first-return resolvent:
+        mu_chi(profile,s) = x0^T (I-Q)^(-1) r_chi(s),
+    where r_chi(s)[tau] = a(tau) E[val|tau] chi(n(tau)) n(tau)^(-s).
+    """
+    if np is None:
+        raise RuntimeError("numpy is required for mu_chi_from_profile_resolvent.")
+    system = build_first_return_system(profile)
+    if len(system.taus) == 0:
+        return 0.0 + 0.0j
+    weights = tau_weight_map(profile, chi_fn, s, tau0=tau0)
+    r_weighted = np.array(
+        [profile.a[tau] * profile.e[tau] * weights[tau] for tau in system.taus],
+        dtype=complex,
+    )
+    g = np.linalg.solve(np.eye(len(system.taus), dtype=complex) - system.Q.astype(complex), r_weighted)
+    return complex(system.x0.astype(complex) @ g)
+
+
+def mu_chi_from_record_resolvent(
+    rec: dict,
+    chi_fn: Callable[[int], int],
+    s: complex,
+    tau0: int = 3,
+) -> complex:
+    """
+    Mixed sector canonical object induced by the weighted first-return resolvent.
+    """
+    if "profile00" not in rec or "profile10" not in rec:
+        raise KeyError("record is missing profile00/profile10; build via build_exact_bank/highk_bank.")
+    mu00 = mu_chi_from_profile_resolvent(rec["profile00"], chi_fn, s, tau0=tau0)
+    mu10 = mu_chi_from_profile_resolvent(rec["profile10"], chi_fn, s, tau0=tau0)
+    return rec["omega"] * mu10 - mu00
 
 
 def richardson_map(v20: Dict[int, float], v21: Dict[int, float]) -> Dict[int, float]:
@@ -221,7 +347,7 @@ def build_extrapolated_profile(
             a[t] = p_inf[t] / s_prev
 
     return TauProfile(
-        K=999, sec=sec, taus=taus,
+        K=999, sec=sec, n_pairs=0, taus=taus,
         p=p_inf, e=e_inf, u=u_inf, q=q, a=a, ccdf=ccdf,
         mu_direct=sum(u_inf.values()),
     )
@@ -254,7 +380,134 @@ def build_highk_bank() -> dict:
             "omega": omega[k],
             "u00": prof[(k, "00")].u,
             "u10": prof[(k, "10")].u,
+            "n00": by_k[k]["n00"] if k in by_k else 0,
+            "n10": by_k[k]["n10"] if k in by_k else 0,
+            "profile00": prof[(k, "00")],
+            "profile10": prof[(k, "10")],
         }
+    return bank
+
+
+def sector_profile_exact(K: int, sector: str) -> TauProfile:
+    """
+    Exact low-K stopping-time profile from exhaustive D-odd enumeration.
+    """
+    D = 2 * K - 1
+    count_tau: Dict[int, int] = defaultdict(int)
+    val_sum_tau: Dict[int, float] = defaultdict(float)
+    n_pairs = 0
+    cas_sum = 0.0
+
+    for _, _, carries in enumerate_dodd_sector(K, sector):
+        n_pairs += 1
+        tau_val = None
+        for j in range(D, 0, -1):
+            if carries[j] > 0:
+                tau_val = D - j
+                break
+
+        cas_val = 0.0
+        if tau_val is not None:
+            j_stop = D - tau_val
+            if j_stop >= 1:
+                cas_val = float(carries[j_stop - 1] - 1)
+        cas_sum += cas_val
+
+        if tau_val is not None:
+            count_tau[tau_val] += 1
+            val_sum_tau[tau_val] += cas_val
+
+    if n_pairs <= 0:
+        return TauProfile(
+            K=K,
+            sec=sector,
+            n_pairs=0,
+            taus=[],
+            p={},
+            e={},
+            u={},
+            q={},
+            a={},
+            ccdf={},
+            mu_direct=0.0,
+        )
+
+    taus = sorted(count_tau.keys())
+    p: Dict[int, float] = {}
+    e: Dict[int, float] = {}
+    u: Dict[int, float] = {}
+    for tau in taus:
+        p[tau] = count_tau[tau] / n_pairs
+        e[tau] = val_sum_tau[tau] / count_tau[tau]
+        u[tau] = val_sum_tau[tau] / n_pairs
+
+    tau_min = taus[0]
+    tau_max = taus[-1]
+    ccdf: Dict[int, float] = {}
+    cdf = 0.0
+    ccdf[tau_min - 1] = 1.0
+    for tau in range(tau_min, tau_max + 1):
+        cdf += p.get(tau, 0.0)
+        ccdf[tau] = max(0.0, 1.0 - cdf)
+
+    q: Dict[int, float] = {}
+    a: Dict[int, float] = {}
+    for tau in taus:
+        s_prev = ccdf[tau - 1]
+        if s_prev <= 1e-18:
+            q[tau] = 0.0
+            a[tau] = 0.0
+        else:
+            q[tau] = min(max(ccdf[tau] / s_prev, 0.0), 1.0)
+            a[tau] = p[tau] / s_prev
+
+    return TauProfile(
+        K=K,
+        sec=sector,
+        n_pairs=n_pairs,
+        taus=taus,
+        p=p,
+        e=e,
+        u=u,
+        q=q,
+        a=a,
+        ccdf=ccdf,
+        mu_direct=cas_sum / n_pairs,
+    )
+
+
+def build_exact_bank(k_min: int, k_max: int) -> Dict[int, dict]:
+    """
+    Build low-K exact records with the same shape as build_highk_bank().
+    """
+    bank: Dict[int, dict] = {}
+    for K in range(k_min, k_max + 1):
+        prof00 = sector_profile_exact(K, "00")
+        prof10 = sector_profile_exact(K, "10")
+        if not prof00.taus or not prof10.taus:
+            continue
+        n00 = prof00.n_pairs
+        n10 = prof10.n_pairs
+        omega = n10 / n00
+        bank[K] = {
+            "omega": omega,
+            "u00": prof00.u,
+            "u10": prof10.u,
+            "n00": n00,
+            "n10": n10,
+            "profile00": prof00,
+            "profile10": prof10,
+        }
+    return bank
+
+
+def build_core_bank(k_exact_min: int = 7, k_exact_max: int = 11) -> Dict[int, dict]:
+    """
+    Unified low-K exact + high-K parsed bank used by operator-first scripts.
+    """
+    bank = {}
+    bank.update(build_exact_bank(k_exact_min, k_exact_max))
+    bank.update(build_highk_bank())
     return bank
 
 
@@ -266,6 +519,15 @@ def u_mix_map(rec: dict) -> Dict[int, float]:
     omega = rec["omega"]
     taus = sorted(set(u00.keys()) | set(u10.keys()))
     return {t: omega * u10.get(t, 0.0) - u00.get(t, 0.0) for t in taus}
+
+
+def mu_chi_from_record(
+    rec: dict,
+    chi_fn: Callable[[int], int],
+    s: complex,
+    tau0: int = 3,
+) -> complex:
+    return mu_chi(u_mix_map(rec), chi_fn, s, tau0=tau0)
 
 
 def n_of_tau(tau: int, tau0: int = 3) -> int:

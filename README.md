@@ -6,23 +6,25 @@
 
 ## Main Result
 
-The stopping-time decomposition of D-odd binary multiplication, projected onto the Dirichlet character χ₄, yields a Dirichlet series μ_χ(K,s) that converges uniformly on compact subsets of Re(s) > 1. For χ₄ the limit satisfies
+The stopping-time decomposition of D-odd binary multiplication, projected onto the Dirichlet character χ₄, yields a Dirichlet series μ_χ(K,s) that is numerically observed to converge uniformly on tested compact subsets of Re(s) > 1. The same channel admits a canonical weighted first-return resolvent realization. For χ₄ the limit satisfies
 
 > μ_χ₄^(∞)(s) ≈ c̃ · (1 + 3⁻ˢ) · L(s, χ₄)²
 
 with holdout relative error ≈ 2.5% and cross-K stability below 10⁻⁵.
 
 Key results:
-- **Propositions 1–4** (unconditional): exact algebraic bridge from Witt p-adic arithmetic through carry operators, character channel, and resolvent identity.
+- **Propositions 1–3** (unconditional): exact algebraic bridge from Witt p-adic arithmetic through carry operators and the character channel.
+- **Proposition 4** (numerical): machine-precision verification of the resolvent identity on the tested range.
 - **Theorem 1** (numerical): uniform Cauchy convergence with geometric contraction ρ ≈ 0.5–0.6.
 - **Theorem 2** (numerical): corrected-L² law with Euler-tail equivalence.
 - **Proposition 5** (numerical): the correction factor F = μ/(cL) is zero-free in the tested strip region [0.3, 0.7] × [0, 15].
+- Canonical diagnostics: operator-level local-factor law agrees with the series presentation; no simple gamma-like completion or zero transfer is seen in the tested strip box.
 
 ## Status
 
-- **Proved:** Propositions 1–4 (algebraic bridge, resolvent identity — exact for all tested K).
-- **Numerical:** Theorems 1–2, Propositions 5–6 (uniform convergence, L² law, zero-free structure, spectral gap — strong numerical evidence, rigorous proof pending).
-- **Open target:** exact closed form for the 2.5% residual; analytic derivation of the corrector exponent k; universal character law.
+- **Proved:** Propositions 1–3 (algebraic bridge and character channel).
+- **Numerical:** Proposition 4, Theorems 1–2, Propositions 5–6 (resolvent identity on tested K, uniform convergence, L² law, zero-free structure, spectral gap — strong numerical evidence, rigorous proof pending).
+- **Open target:** exact closed form for the 2.5% residual; analytic derivation of the corrector exponent k; a nontrivial completion/phase mechanism.
 
 ## Repository Structure
 
@@ -42,6 +44,14 @@ experiments/
   L09_residual_audit.py                       Bootstrap, ablation, L² equivalence (§4.3–4.5)
   L10_local_corrector.py                      Cross-character corrector scan (§6)
   L11_mechanism_controls.py                   A/B mechanism controls (§6.3)
+  L12_operator_core_regression.py             Shared operator/stopping-time regression checks
+  L13_s1_scalar_reduction.py                  Scalar reduction R(∞)=C·L(1,χ₄) at s=1
+  L14_s1_lambda2_envelope.py                  Conditioned-rate envelope toward 1/2
+  L15_s1_tail_exchange.py                     Tail-majorant template for limit/sum exchange
+  L16_canonical_weighted_resolvent.py         Canonical weighted first-return resolvent
+  L17_resolvent_local_factor_scan.py          Operator-level local-factor scan
+  L18_completion_symmetry_diagnostics.py      Completion / FE diagnostics
+  L19_canonical_zero_fingerprint.py           Zero fingerprint for the canonical object
 ```
 
 ## Reproduction
@@ -62,6 +72,14 @@ python L08_euler_tail_identity.py
 python L09_residual_audit.py
 python L10_local_corrector.py
 python L11_mechanism_controls.py
+python L12_operator_core_regression.py
+python L13_s1_scalar_reduction.py
+python L14_s1_lambda2_envelope.py
+python L15_s1_tail_exchange.py
+python L16_canonical_weighted_resolvent.py
+python L17_resolvent_local_factor_scan.py
+python L18_completion_symmetry_diagnostics.py
+python L19_canonical_zero_fingerprint.py
 ```
 
 ## Dependencies
