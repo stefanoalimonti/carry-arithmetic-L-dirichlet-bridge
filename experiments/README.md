@@ -7,7 +7,7 @@
 | `L03_character_channel.py` | χ₄-weighted character channel on z-states; carry/Witt channel identity; transient half-rate 1/2. K = 7…12. | §2.3 (Proposition 3) |
 | `L04_dodd_nonstationary.py` | D-odd multiplication carry chains; per-depth transition operators; intertwiner and channel checks at every depth. K = 7…12. | §2.4 |
 | `L05_analytic_resolvent.py` | Full D-odd enumeration; stopping-time decomposition; resolvent identity Σu(τ) = μ to machine precision; spectral gap; R(K) computation. K = 7…12. | §2.5 (Proposition 4) |
-| `L06_diaconis_fulman_bound.py` | Survival probabilities, two-step products, K-convergence and τ-convergence diagnostics. Confirms dominant 1/2 rate under D-odd conditioning. | §2.6 (Proposition 6) |
+| `L06_diaconis_fulman_bound.py` | Survival probabilities, two-step products, K-convergence and τ-convergence diagnostics. Confirms dominant 1/2 rate under D-odd conditioning. | §2.6 (Proposition 5) |
 | `L07_uniform_convergence.py` | sup-norm Cauchy diagnostics for μ_χ(K,s) on compact grids in Re(s) > 1. Small-K exact + high-K E45 profiles. Geometric contraction and envelope. | §3 (Theorem 1) |
 | `L08_euler_tail_identity.py` | Normalized F_obs vs Euler-product templates on odd primes. Zero-parameter shape match. Cross-K stability. | §4.2 |
 | `L09_residual_audit.py` | Full residual model audit: M0–M3 comparison, bootstrap M1 vs M2, leave-one-prime-out ablation, sign-shuffle control, cross-character survey, direct μ modeling (cL, cL², c(1+3⁻ˢ)L², cL·E_tail). | §4.3–§4.5 |

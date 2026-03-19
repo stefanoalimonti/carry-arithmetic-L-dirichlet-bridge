@@ -70,6 +70,8 @@ with holdout relative error $\approx 2.5\%$ and cross-$K$ stability below $10^{-
 
 The correction factor $(1 + 3^{-s})$ removes exactly one power of the Euler factor at $p = 3$. The $L^2$ structure reflects the Dirichlet convolution arising from the product $x \cdot y$: in the character ring, the multiplicative structure of the two factors produces a convolution of $L$-functions.
 
+![μ_χ₄ vs L(s,χ₄)²](../figures/fig_l_squared.png)
+
 ---
 
 ## 5. Why $L^2$ and Not $L$?
@@ -78,7 +80,7 @@ The $L^2$ structure is natural from two perspectives:
 
 **Algebraic:** The Dirichlet series associated to a product $N = p \cdot q$ of two random integers is a convolution of two Dirichlet series (one for each factor). Under the Dirichlet character $\chi$, the convolution becomes $L(s, \chi) * L(s, \chi) = L(s, \chi)^2$ (up to finitely many Euler factors).
 
-**Analytic:** The correction factor $F(s) = \mu(s)/(\tilde{c} \cdot L(s, \chi_4))$ is meromorphic and zero-free in the tested strip $[0.3, 0.7] \times [0, 15]$ (Proposition 5). Its poles coincide with the zeros of $L(s, \chi_4)$, confirming that the second $L$-factor comes from the correction, not from the base series. The direct and canonical carry objects themselves remain zero-free in that box.
+**Analytic:** The correction factor $F(s) = \mu(s)/(\tilde{c} \cdot L(s, \chi_4))$ is meromorphic and zero-free in the tested strip $[0.3, 0.7] \times [0, 15]$ (Proposition 6). Its poles coincide with the zeros of $L(s, \chi_4)$, confirming that the second $L$-factor comes from the correction, not from the base series. The direct and canonical carry objects themselves remain zero-free in that box.
 
 ---
 

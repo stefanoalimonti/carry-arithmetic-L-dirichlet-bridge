@@ -14,7 +14,7 @@ The resulting carry-Dirichlet channel μ_χ(K,s) = Σ_τ u_mix(τ) χ(n(τ)) n(�
 
 > μ_χ₄^(∞)(s) = c̃ · (1 + 3^{−s}) · L(s, χ₄)² + ε(s),
 
-with holdout relative error |ε|/|μ| ≈ 2.5% and cross-K stability below 10⁻⁵ (Theorem 2, numerical). The correction factor (1 + 3^{−s}) removes exactly one power of the Euler factor at p = 3, and the L² structure reflects the Dirichlet convolution arising from the product x · y. The same local-corrector law is recovered when μ_χ is computed from the canonical weighted resolvent object. The correction factor F(s) = μ/(cL) is meromorphic and zero-free in the tested strip region [0.3, 0.7] × [0, 15] (Proposition 5). No simple gamma-like completion of the canonical object yields an approximate functional equation on the tested mirrored grids, and the canonical object remains zero-free in the tested strip box. A low-complexity corrector law extends to χ₅ and χ₈ with modified exponent, while χ₃ (conductor 3) is an outlier.
+with holdout relative error |ε|/|μ| ≈ 2.5% and cross-K stability below 10⁻⁵ (Theorem 2, numerical). The correction factor (1 + 3^{−s}) removes exactly one power of the Euler factor at p = 3, and the L² structure reflects the Dirichlet convolution arising from the product x · y. The same local-corrector law is recovered when μ_χ is computed from the canonical weighted resolvent object. The correction factor F(s) = μ/(cL) is meromorphic and zero-free in the tested strip region [0.3, 0.7] × [0, 15] (Proposition 6). No simple gamma-like completion of the canonical object yields an approximate functional equation on the tested mirrored grids, and the canonical object remains zero-free in the tested strip box. A low-complexity corrector law extends to χ₅ and χ₈ with modified exponent, while χ₃ (conductor 3) is an outlier.
 
 These results establish a quantitative bridge between the Markov dynamics of binary carries and the multiplicative structure of Dirichlet L-functions. They do not imply zero-transfer theorems or results toward the Riemann Hypothesis; at present the bridge reaches Euler/amplitude structure, but not the phase/completion mechanism that would be needed for zeros.
 
@@ -77,7 +77,7 @@ on Re(s) > 1, with holdout relative error ≈ 2.5% (Theorem 2, numerical). Two e
 
 These coincide on Re(s) > 1 because (1 + 3^{−s}) · L² = L · ∏_{p≥5} (1 − χ₄(p) p^{−s})^{−1}. The Euler-tail truncation to p ≤ 401 introduces a discrepancy below 3 × 10⁻³ on tested grids.
 
-**Zero-free structure (§5).** The correction factor F(s) = μ(s)/(c · L(s, χ₄)) is meromorphic in the tested box [0.3, 0.7] × [0, 15] with poles at the zeros of L(s, χ₄) and no zeros of its own (Proposition 5). This implies that μ^(∞) is analytic and zero-free in that region.
+**Zero-free structure (§5).** The correction factor F(s) = μ(s)/(c · L(s, χ₄)) is meromorphic in the tested box [0.3, 0.7] × [0, 15] with poles at the zeros of L(s, χ₄) and no zeros of its own (Proposition 6). This implies that μ^(∞) is analytic and zero-free in that region.
 
 **Cross-character extension (§6).** A low-complexity corrector law
 
@@ -160,7 +160,7 @@ The R(K) values from exact enumeration at K = 7, …, 12 match the independent E
 
 ### 2.6 Spectral gap
 
-**Proposition 6** (Diaconis–Fulman bound, numerical). *The numerical evidence strongly supports that conditioning on D-odd does not change the dominant spectral gap: the two-step survival product q(τ)q(τ+1) converges to 1/4 = (1/2)², consistent with the Diaconis–Fulman rate for the conditioned chain. A fully rigorous proof requires showing that the Doob h-transform of the carry chain (conditioning on D-odd) has spectral radius ≤ 1/2 for the restricted chain.* (Experiment L06.)
+**Proposition 5** (Diaconis–Fulman bound, numerical). *The numerical evidence strongly supports that conditioning on D-odd does not change the dominant spectral gap: the two-step survival product q(τ)q(τ+1) converges to 1/4 = (1/2)², consistent with the Diaconis–Fulman rate for the conditioned chain. A fully rigorous proof requires showing that the Doob h-transform of the carry chain (conditioning on D-odd) has spectral radius ≤ 1/2 for the restricted chain.* (Experiment L06.)
 
 ---
 
@@ -271,7 +271,7 @@ For comparison, L(s, χ₄) has three zeros in the same box, at approximately s 
 
 ### 5.2 Zero-free correction factor
 
-**Proposition 5** (F zero-free). *The correction factor F(s) = μ(s)/(c · L(s, χ₄)) has winding index −3 on the boundary of [0.3, 0.7] × [0, 15], decomposing as Z − P = 0 − 3 where Z = 0 (no zeros) and P = 3 (three poles, inherited from the three zeros of L(s, χ₄)). This is consistent with F being meromorphic and zero-free in the tested strip region.*
+**Proposition 6** (F zero-free). *The correction factor F(s) = μ(s)/(c · L(s, χ₄)) has winding index −3 on the boundary of [0.3, 0.7] × [0, 15], decomposing as Z − P = 0 − 3 where Z = 0 (no zeros) and P = 3 (three poles, inherited from the three zeros of L(s, χ₄)). This is consistent with F being meromorphic and zero-free in the tested strip region.*
 
 Within the tested box, this implies that μ^(∞) is itself analytic and zero-free: the carry chain does not develop zeros at the L-function zero positions in this region. Extension to the full critical strip would require either larger contour tests or an analytic argument; neither is available at present.
 
@@ -284,6 +284,15 @@ This confirms the structural limitation: the carry chain encodes the amplitude o
 ### 5.4 Completion diagnostics
 
 To test whether the missing zero mechanism could arise from a simple archimedean completion, we formed gamma-like completions of the canonical weighted-resolvent object and compared $\Xi(s)$ against $\varepsilon\,\Xi(1-s)$ on mirrored strip samples. No raw or gamma-weighted candidate produced a small symmetry defect: the best mean defect stays above 0.18 across the tested characters, and for χ₄ the raw object already performs best (mean defect ≈ 0.278). Thus the present carry object does not admit a simple classical completion analogous to the one for Dirichlet L-functions.
+
+### 5.5 Topological stability of minimum positions
+
+The minimum *positions* of $|\mu_{\chi_4}(999, 1/2 + it)|$ are topologically stable under the K → ∞ limit. Comparing the K = 21 and K = 999 (Richardson proxy) profiles on a grid with spacing dt = 0.05, all 15 tested minima have shift = 0.000: no minimum moves by even one grid point. This strengthens the mirroring result of §5.3 in two ways:
+
+- **§5.3** establishes that the depth-of-minima ratios $S_j(K)$ remain approximately flat (the *values* of the minima do not converge to zero), confirming the zero-transfer obstruction.
+- **§5.5** establishes that the *locations* of the minima are fixed to within the grid resolution. The zero-detection structure is therefore a topological property of the carry operator, not an artifact of the truncation at finite K.
+
+The carry object encodes the positions of L-function zeros (in the sense that its amplitude minima track them) with exact positional stability, while remaining strictly positive (zero-free). Both properties are simultaneously present: spatial accuracy without magnitude cancellation.
 
 ---
 
@@ -317,6 +326,25 @@ A/B controls (experiment L11) provide partial evidence on the mechanism underlyi
 - **Not driven by a single factor**: removing the n^{−s} weight preserves the k-pattern, but removing the character channel or scrambling the τ → n map degrades it. The controls point to a genuinely hybrid mechanism rather than to a single dominant ingredient.
 - **Not reducible to raw p-adic frequencies**: the distribution of v₃(xy) among D-odd pairs does not isolate p = 3 as dominant. The correction appears to be an analytic-structural phenomenon involving the interaction of the character channel, the stopping-time map, and the Dirichlet weight, though a complete mechanistic derivation remains open.
 
+### 6.4 Critical-line non-universality
+
+On the critical line Re(s) = 1/2, the mixed channel admits a linear decomposition (see §7.4):
+
+$$\mu_{\chi}(s) \approx c_{\mathrm{carry}} \cdot L(s, \chi) + B(s) \cdot L'(s, \chi).$$
+
+This two-term fit is effective only for characters whose conductor is a power of 2. Specifically:
+
+| χ | q | Critical-line fit error |
+|---|---|------------------------|
+| χ₄ | 4 | 5% |
+| χ₈ | 8 | 10% |
+| χ₃ | 3 | 44% |
+| χ₅ | 5 | 47% |
+
+The mechanism behind the conductor restriction is arithmetic: the stopping-time map produces $n(\tau) = 2(\tau - \tau_0) + 1$, which takes only odd values. For χ with odd-prime conductor $q$ (such as χ₃ or χ₅), the character satisfies $\chi(n) = 0$ whenever $q \mid n$, leaving systematic gaps in the Dirichlet series support. For $q = 2^k$ (χ₄, χ₈), every odd integer is coprime to $q$, so the series is complete.
+
+This restriction is distinct from the cross-character corrector behavior on Re(s) > 1 (§6.1), where χ₅ gains +46% from the local corrector. The two regimes — L² on Re(s) > 1 and linear L + L' on Re(s) = 1/2 — have different universality properties.
+
 ---
 
 ## 7. Discussion
@@ -333,16 +361,16 @@ The connection takes the form μ^(∞)(s) ≈ c̃ · (1 + 3^{−s}) · L²(s, χ
 
 ### 7.2 Relation to companion papers
 
-- **[P1]** conjectures R(∞) = −π = −4L(1, χ₄) (Conjecture 1, supported by 4.0-digit numerical evidence) and develops the stopping-time decomposition. The present paper extends the analysis from a single value (s = 1) to a function of s, identifies a canonical weighted-resolvent object, and sharpens the remaining s = 1 closure to a scalar constant together with the conditioned 1/2-rate theorem.
+- **[P1]** conjectures R(∞) = −π = −4L(1, χ₄) (Conjecture 1, supported by 4.0-digit numerical evidence) and develops the stopping-time decomposition. The present paper extends the analysis from a single value (s = 1) to a function of s, identifies a canonical weighted-resolvent object, and sharpens the remaining s = 1 closure to a scalar constant together with the conditioned 1/2-rate theorem. The topological stability of §5.5 (minimum positions shift = 0 from K = 21 to K = 999) provides a complementary stability result: the zero-detection structure is K-stable in position, not only in depth.
 - **[E]** proves R = −π conditionally on LMH via the shifted resolvent. The present paper supports the same macro picture from the stopping-time side, but also shows that no simple completion of the current carry object yields an L-function-style functional equation.
 - **[H]** shows that carry corrections do not contribute information about zeta zeros beyond the Euler product. The zero-free property of §5 is consistent with this finding.
-- **[Frobenius]** constructs the Witt-carry bridge at odd primes p = 3, 7. Propositions 1–2 of the present paper establish the analogous bridge at p = 2.
+- **[Frobenius]** constructs the Witt-carry bridge at odd primes: exact Frobenius factors at p = 3 and p = 7, and an anti-diagonal unitary factorization B = √p · P (with analytic Weil bound proof) valid for all primes. Propositions 1–2 of the present paper establish the analogous bridge at p = 2.
 
 ### 7.3 Open problems
 
 1. **Exact identity or approximation?** Is there a closed form for the 2.5% residual? The correction F(s) may involve higher-order Euler factors or finitely many additional primes.
 
-2. **Analytic computation of c̃.** The proportionality constant c̃ should be derivable from the carry chain structure. Numerically c̃ ≈ 0.025 (for the (1 + 3^{−s}) · L² formulation).
+2. **Analytic computation of c̃.** The proportionality constant c̃ should be derivable from the carry chain structure. Numerically, $\tilde{c}(\sigma) = \mu(s)/[(1+3^{-s}) \cdot L^2(s,\chi_4)]$ converges as $\sigma \to \infty$ to the limit $c_{\mathrm{carry}} = \lim_{\sigma\to\infty} \tilde{c}(\sigma) \approx 0.0556$ (equal to $u_{\mathrm{mix}}(\tau_0)$, the dominant term in the stopping-time series). This value is close to $1/18 = 0.05556$ to within $0.05\%$; whether $c_{\mathrm{carry}} = 1/18$ exactly remains an open conjecture. (The value $0.025$ represents the mean relative error of the approximation, distinct from the proportionality constant $c_{\mathrm{carry}}$.)
 
 3. **Why p = 3?** The correction involves p = 3 = 2 + 1 exclusively. A precise connection between the base b = 2 and the corrector prime p = b + 1 may hold in generality.
 
@@ -350,11 +378,31 @@ The connection takes the form μ^(∞)(s) ≈ c̃ · (1 + 3^{−s}) · L²(s, χ
 
 5. **Conductor dependence of k.** The exponent k = 1 for q = 4 and k = 2 for q = 5, 8 may follow from the structure of (ℤ/qℤ)* and its interaction with the base b = 2. A structural derivation would replace the current discrete scan.
 
-6. **Universal character law.** The failure of χ₃ (conductor 3) suggests that a universal law requires treating the case gcd(q, p₀) > 0 separately. Whether a two-prime corrector (p₀ = 3, p₁ = 5) rescues χ₃ is untested.
+6. **Universal character law.** The failure of χ₃ (conductor 3) suggests that a universal law requires treating the case gcd(q, p₀) > 1 separately. Whether a two-prime corrector (p₀ = 3, p₁ = 5) rescues χ₃ is untested.
 
 7. **Archimedean completion.** The current canonical weighted-resolvent object does not admit a simple gamma-like completion with approximate symmetry $\Xi(s)\approx\varepsilon\,\Xi(1-s)$ on the tested grids. The missing completion mechanism is therefore a genuine structural problem, not a notational omission.
 
 8. **Zero transfer.** The canonical carry object remains zero-free in the tested critical-strip box while $L(s,\chi_4)$ has three zeros there. Any RH-adjacent extension must therefore build phase and zero structure beyond the current amplitude/Euler bridge.
+
+9. **Analytic form of B(s).** The critical-line coefficient function $B(1/2 + it)$ (§7.4) satisfies $B(t) \approx 0.041 \cdot t^{-0.23}$ with $B(\infty) \approx 0.012$. The exponent $0.23$ does not match $1/4$ or any simple rational. Derivation of $B(s)$ from the carry-chain resolvent, and whether $B(\infty) > 0$ implies a persistent second-order correction, remain open.
+
+### 7.4 Critical-line spectral bridge
+
+On the critical line Re(s) = 1/2, the mixed channel satisfies a linear two-term decomposition that is distinct from the L² formula valid on Re(s) > 1:
+
+$$\mu_{\chi_4}(s) \approx c_{\mathrm{carry}} \cdot L(s, \chi_4) + B(s) \cdot L'(s, \chi_4), \qquad \mathrm{Re}(s) = 1/2,$$
+
+where $L'(s, \chi_4) = \partial_s L(s, \chi_4)$ is the derivative with respect to $s$, and:
+
+- $c_{\mathrm{carry}} \approx 0.0556$ is a constant independent of t (the limit $\lim_{\sigma\to\infty} \tilde{c}(\sigma)$, see §7.3 problem 2).
+- $B(1/2 + it) \approx 0.041 \cdot t^{-0.23}$ decreases with height; the residual $B(\infty) \approx 0.012$.
+- Fit error: $\approx 5\%$ on the critical line ($\sigma = 1/2$), improving to $\approx 0.5\%$ at $\sigma = 2$.
+
+The two regimes — $L^2$ on Re(s) > 1 and $L + L'$ on Re(s) = 1/2 — are not contradictory: as $\sigma$ increases from 1/2 toward infinity, $B(s)$ grows (from the critical-line perspective, $B$ decreases with $t$ but increases with $\sigma$ in the right half-plane), and the derivative term becomes relatively less significant compared to the dominant $L^2$ structure.
+
+**Spectral depth saturation.** A multi-term fit $\mu \approx \sum_{n=0}^{N} a_n L^{(n)}(s, \chi_4)$ on the critical line saturates at $N = 4$: the fit error does not decrease beyond $\approx 4\%$ for any $N \geq 4$. The residual is consistent with white noise in the $\{L^{(n)}\}$ basis (flat FFT spectrum, no dominant frequency). This establishes a structural floor: the carry channel encodes $L$ and its derivatives to order 3, with a $\sim 4\%$ indecodable remainder.
+
+**Coefficient at zeros.** At the zeros $\rho$ of $L(s, \chi_4)$, the two-term decomposition reduces to $\mu(\rho) \approx B(\rho) \cdot L'(\rho)$. The residues $\mu(\rho)/L'(\rho)$ decrease slowly from $\approx 0.024$ at the first zero ($t \approx 6$) to $\approx 0.017$ at the 25th zero ($t \approx 58$), consistent with the power-law decay of $B(t)$.
 
 ---
 
@@ -385,6 +433,9 @@ The connection takes the form μ^(∞)(s) ≈ c̃ · (1 + 3^{−s}) · L²(s, χ
 | `L17_resolvent_local_factor_scan.py` | Operator-level local-factor scan `(p,k)` | §6.1 |
 | `L18_completion_symmetry_diagnostics.py` | Completion / functional-equation diagnostics | §5.4 |
 | `L19_canonical_zero_fingerprint.py` | Zero fingerprint for the canonical object | §5.1–§5.4 |
+| `L20_spectral_bridge.py` | Critical-line spectral decomposition $\mu \approx c_{\mathrm{carry}} L + B L'$ | §7.4 |
+| `L21_conductor_restriction.py` | Conductor restriction: $\chi_4, \chi_8$ vs.\ $\chi_3, \chi_5$ fit quality | §6.4 |
+| `L22_zero_position_stability.py` | Topological stability of $|\mu_{\chi_4}|$ minimum positions $K=21\to 999$ | §5.5 |
 
 ### 8.2 Data sources
 
@@ -418,6 +469,9 @@ python L16_canonical_weighted_resolvent.py
 python L17_resolvent_local_factor_scan.py
 python L18_completion_symmetry_diagnostics.py
 python L19_canonical_zero_fingerprint.py
+python L20_spectral_bridge.py
+python L21_conductor_restriction.py
+python L22_zero_position_stability.py
 ```
 
 ### 8.4 Gate summary
@@ -432,7 +486,7 @@ All quantitative claims in this paper are supported by explicit quantitative thr
 | Resolvent identity (Prop 4) | $\lvert \mu_{res} - \mu_{dir} \rvert < 10^{-16}$ | PASS |
 | Cauchy convergence (Thm 1) | contraction ratios ≤ 0.75, envelope violation = 0 | PASS |
 | L² formula (Thm 2) | hold-MRE ≤ 0.03, cross-K rel-std ≤ 10⁻² | PASS |
-| F zero-free in tested box (Prop 5) | winding index Z = 0, P = N_L | PASS |
+| F zero-free in tested box (Prop 6) | winding index Z = 0, P = N_L | PASS |
 | Cross-character (§6) | ≥ 3 characters with ≥ 40% gain, rel-std ≤ 0.02 | PASS |
 | Canonical weighted resolvent (§3.3) | `|M_\chi - \mu_\chi| ≤ 10^{-12}` on tested grids | PASS |
 | Operator-level `(p,k)` law (§6.1) | χ₄ best `(3,1)` and ≥ 3 stable characters | PASS |

@@ -17,7 +17,7 @@ Key results:
 - **Proposition 4** (numerical): machine-precision verification of the resolvent identity on the tested range.
 - **Theorem 1** (numerical): uniform Cauchy convergence with geometric contraction ρ ≈ 0.5–0.6.
 - **Theorem 2** (numerical): corrected-L² law with Euler-tail equivalence.
-- **Proposition 5** (numerical): the correction factor F = μ/(cL) is zero-free in the tested strip region [0.3, 0.7] × [0, 15].
+- **Proposition 6** (numerical): the correction factor F = μ/(cL) is zero-free in the tested strip region [0.3, 0.7] × [0, 15].
 - Canonical diagnostics: operator-level local-factor law agrees with the series presentation; no simple gamma-like completion or zero transfer is seen in the tested strip box.
 
 ## Status
@@ -52,6 +52,9 @@ experiments/
   L17_resolvent_local_factor_scan.py          Operator-level local-factor scan
   L18_completion_symmetry_diagnostics.py      Completion / FE diagnostics
   L19_canonical_zero_fingerprint.py           Zero fingerprint for the canonical object
+  L20_spectral_bridge.py                     Critical-line spectral decomposition (§7.4)
+  L21_conductor_restriction.py               Conductor restriction analysis (§6.4)
+  L22_zero_position_stability.py             Topological stability of minimum positions (§5.5)
 ```
 
 ## Reproduction
@@ -80,6 +83,9 @@ python L16_canonical_weighted_resolvent.py
 python L17_resolvent_local_factor_scan.py
 python L18_completion_symmetry_diagnostics.py
 python L19_canonical_zero_fingerprint.py
+python L20_spectral_bridge.py
+python L21_conductor_restriction.py
+python L22_zero_position_stability.py
 ```
 
 ## Dependencies
@@ -94,6 +100,8 @@ python L19_canonical_zero_fingerprint.py
 | [E] | The Trace Anomaly of Binary Multiplication | [`carry-arithmetic-E-trace-anomaly`](https://github.com/stefanoalimonti/carry-arithmetic-E-trace-anomaly) |
 | [H] | Carry Polynomials and the Partial Euler Product (Control) | [`carry-arithmetic-H-euler-control`](https://github.com/stefanoalimonti/carry-arithmetic-H-euler-control) |
 | [Frobenius] | Frobenius Eigenvalues and Gauss Sums from Witt Carries | [`carry-frobenius`](https://github.com/stefanoalimonti/carry-frobenius) |
+| [A] | Spectral Theory of Carries in Positional Multiplication | [`carry-arithmetic-A-spectral-theory`](https://github.com/stefanoalimonti/carry-arithmetic-A-spectral-theory) |
+| [B] | Carry Polynomials and the Euler Product | [`carry-arithmetic-B-zeta-approximation`](https://github.com/stefanoalimonti/carry-arithmetic-B-zeta-approximation) |
 
 ### Citation
 

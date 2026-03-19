@@ -49,6 +49,19 @@
 % Allow footnotes in longtable head/foot
 \IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
 \makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
 \setlength{\emergencystretch}{3em} % prevent overfull lines
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
@@ -215,6 +228,12 @@ arising from the product \(x \cdot y\): in the character ring, the
 multiplicative structure of the two factors produces a convolution of
 \(L\)-functions.
 
+\begin{figure}
+\centering
+\includegraphics{../figures/fig_l_squared.png}
+\caption{μ\_χ₄ vs L(s,χ₄)²}
+\end{figure}
+
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \newpage
@@ -232,7 +251,7 @@ many Euler factors).
 
 \textbf{Analytic:} The correction factor
 \(F(s) = \mu(s)/(\tilde{c} \cdot L(s, \chi_4))\) is meromorphic and zero-free in
-the tested strip \([0.3, 0.7] \times [0, 15]\) (Proposition 5). Its poles
+the tested strip \([0.3, 0.7] \times [0, 15]\) (Proposition 6). Its poles
 coincide with the zeros of \(L(s, \chi_4)\), confirming that the second
 \(L\)-factor comes from the correction, not from the base series. The direct and
 canonical carry objects themselves remain zero-free in that box.
